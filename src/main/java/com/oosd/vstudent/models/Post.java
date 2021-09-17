@@ -42,7 +42,7 @@ public class Post {
     @Column(name = "timestamp")
     private String timestamp;
 
-    @OneToMany(mappedBy = "author")
+    @OneToMany(mappedBy = "post")
     private List<Comment> comments;
 
 

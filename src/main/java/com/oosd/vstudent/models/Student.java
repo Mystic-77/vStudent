@@ -37,4 +37,5 @@ public class Student
     @OneToMany(mappedBy = "author")
     private List<Post> posts;
 
+
 }

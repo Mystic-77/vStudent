@@ -17,6 +17,10 @@ public class Comment {
 
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "post_id")
+    private Post post;
+
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "student_id")
     private Student author;
 
     @Column(name = "timestamp")
@@ -26,8 +30,9 @@ public class Comment {
 
     public Comment() { }
 
-    public Comment(String content, Student author, String timestamp) {
+    public Comment(String content, Post post, Student author, String timestamp) {
         this.content = content;
+        this.post = post;
         this.author = author;
         this.timestamp = timestamp;
     }
@@ -49,12 +54,12 @@ public class Comment {
         this.content = content;
     }
 
-    public Student getAuthor() {
-        return author;
+    public Post getPost() {
+        return post;
     }
 
-    public void setAuthor(Student author) {
-        this.author = author;
+    public void setPost(Post post) {
+        this.post = post;
     }
 
     public String getTimestamp() {
@@ -65,14 +70,21 @@ public class Comment {
         this.timestamp = timestamp;
     }
 
-    //to string
+    public Student getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Student author) {
+        this.author = author;
+    }
+//to string
 
     @Override
     public String toString() {
         return "Comment{" +
                 "id=" + id +
                 ", content='" + content + '\'' +
-                ", author=" + author +
+                ", post=" + post +
                 ", timestamp='" + timestamp + '\'' +
                 '}';
     }

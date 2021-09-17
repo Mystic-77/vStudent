@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "tags")
+@Table(name = "tag")
 public class Tag {
 
     @Id
@@ -22,4 +22,14 @@ public class Tag {
             inverseJoinColumns = @JoinColumn(name = "student_id")
     )
     private List<Student> students;
+
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(
+            name = "post_tags",
+            joinColumns = @JoinColumn(name = "tag_id"),
+            inverseJoinColumns = @JoinColumn(name = "post_id")
+    )
+    private List<Post> posts;
+
+
 }

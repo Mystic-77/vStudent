@@ -33,4 +33,8 @@ public class Student
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
     private List<Tag> tags;
+
+    @OneToMany(mappedBy = "author")
+    private List<Post> posts;
+
 }

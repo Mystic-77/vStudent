@@ -33,7 +33,6 @@ public class Document {
 
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "student_id")
-    @Column(name = "author")
     private Student author;
 
     //constructor

@@ -26,10 +26,8 @@ public class Role {
 
     public Role() { }
 
-    public Role(int id, String role, List<Student> students) {
-        this.id = id;
+    public Role(String role) {
         this.role = role;
-        this.students = students;
     }
 
     //getters and setters

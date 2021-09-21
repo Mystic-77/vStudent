@@ -45,6 +45,13 @@ public class Post {
     @OneToMany(mappedBy = "post")
     private List<Comment> comments;
 
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(
+            name = "likes",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "student_id")
+    )
+    private List<Student> likedBy;
 
     //constructors
     public Post() { }
@@ -123,6 +130,15 @@ public class Post {
     public void setComments(List<Comment> comments) {
         this.comments = comments;
     }
+
+    public List<Student> getLikedBy() {
+        return likedBy;
+    }
+
+    public void setLikedBy(List<Student> likedBy) {
+        this.likedBy = likedBy;
+    }
+
     //toString
 
 
@@ -137,6 +153,7 @@ public class Post {
                 ", tags=" + tags +
                 ", timestamp='" + timestamp + '\'' +
                 ", comments=" + comments +
+                ", likedBy=" + likedBy +
                 '}';
     }
 }

@@ -6,6 +6,10 @@ import javax.persistence.*;
 @Table(name = "carpool")
 public class CarPool {
 
+    public enum Status {
+        OPEN, CLOSED;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "carpool_id")
@@ -27,6 +31,10 @@ public class CarPool {
     @Column(name = "date")
     private String date;
 
+    @Enumerated
+    @Column(name = "status",
+        columnDefinition = "smallint")
+    private Status status;
     //constructors
     public CarPool() { }
 

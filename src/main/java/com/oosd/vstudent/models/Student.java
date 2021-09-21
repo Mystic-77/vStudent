@@ -37,6 +37,14 @@ public class Student
     @OneToMany(mappedBy = "author")
     private List<Post> posts;
 
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(
+            name = "likes",
+            joinColumns = @JoinColumn(name = "student_id"),
+            inverseJoinColumns = @JoinColumn(name = "post_id")
+    )
+    private List<Post> likedPosts;
+
     @OneToMany(mappedBy = "author")
     private List<Document> documents;
 
@@ -129,6 +137,14 @@ public class Student
         this.carPools = carPools;
     }
 
+    public List<Post> getLikedPosts() {
+        return likedPosts;
+    }
+
+    public void setLikedPosts(List<Post> likedPosts) {
+        this.likedPosts = likedPosts;
+    }
+
     //to string
 
     @Override
@@ -141,6 +157,7 @@ public class Student
                 ", role=" + role +
                 ", tags=" + tags +
                 ", posts=" + posts +
+                ", likedPosts=" + likedPosts +
                 ", documents=" + documents +
                 ", carPools=" + carPools +
                 '}';

@@ -2,6 +2,7 @@ package com.oosd.vstudent.models;
 
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "comment")
@@ -25,6 +26,14 @@ public class Comment {
 
     @Column(name = "timestamp")
     private String timestamp;
+
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(
+            name = "comment_likes",
+            joinColumns = @JoinColumn(name = "comment_id"),
+            inverseJoinColumns = @JoinColumn(name = "student_id")
+    )
+    private List<Student> likedBy;
 
     //constructors
 
@@ -77,7 +86,17 @@ public class Comment {
     public void setAuthor(Student author) {
         this.author = author;
     }
-//to string
+
+    public List<Student> getLikedBy() {
+        return likedBy;
+    }
+
+    public void setLikedBy(List<Student> likedBy) {
+        this.likedBy = likedBy;
+    }
+
+    //to string
+
 
     @Override
     public String toString() {
@@ -85,7 +104,9 @@ public class Comment {
                 "id=" + id +
                 ", content='" + content + '\'' +
                 ", post=" + post +
+                ", author=" + author +
                 ", timestamp='" + timestamp + '\'' +
+                ", likedBy=" + likedBy +
                 '}';
     }
 }

@@ -1,7 +1,7 @@
 package com.oosd.vstudent.repositories;
 
 import com.oosd.vstudent.models.Tag;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface TagRepository extends CrudRepository<Tag, Integer> {
+public interface TagRepository extends JpaRepository<Tag, Integer> {
 }

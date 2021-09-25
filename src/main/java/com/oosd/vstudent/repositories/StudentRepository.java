@@ -1,7 +1,7 @@
 package com.oosd.vstudent.repositories;
 
 import com.oosd.vstudent.models.Student;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface StudentRepository extends CrudRepository<Student, Integer> {
+public interface StudentRepository extends JpaRepository<Student, Integer> {
 }

@@ -29,6 +29,9 @@ public class DatabaseService {
     @Autowired
     private CarPoolRepository carPoolRepository;
 
+    @Autowired
+    private DocumentStorageRepository documentStorageRepository;
+
     public StudentRepository getStudentRepository() {
         return studentRepository;
     }
@@ -55,5 +58,9 @@ public class DatabaseService {
 
     public CarPoolRepository getCarPoolRepository() {
         return carPoolRepository;
+    }
+
+    public DocumentStorageRepository getDocumentStorageRepository() {
+        return documentStorageRepository;
     }
 }

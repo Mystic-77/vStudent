@@ -59,16 +59,21 @@ public class Student
     @OneToMany(mappedBy = "host")
     private List<CarPool> carPools;
 
+    @OneToOne
+    @JoinColumn(name = "file_id")
+    private DocumentStorage profilePicture;
+
     //constructors
 
     public Student() { }
 
-    public Student(String username, String password, String email, Role role, List<Tag> tags) {
+    public Student(String username, String password, String email, Role role, List<Tag> tags, DocumentStorage profilePicture) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.role = role;
         this.tags = tags;
+        this.profilePicture = profilePicture;
     }
 
     //getters and setters
@@ -161,7 +166,16 @@ public class Student
         this.likedComments = likedComments;
     }
 
+    public DocumentStorage getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(DocumentStorage profilePicture) {
+        this.profilePicture = profilePicture;
+    }
+
     //to string
+
 
     @Override
     public String toString() {
@@ -177,6 +191,7 @@ public class Student
                 ", likedComments=" + likedComments +
                 ", documents=" + documents +
                 ", carPools=" + carPools +
+                ", profilePicture=" + profilePicture +
                 '}';
     }
 }

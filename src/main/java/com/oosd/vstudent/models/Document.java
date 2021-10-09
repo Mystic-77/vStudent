@@ -24,12 +24,12 @@ public class Document {
     @Column(name = "document_name")
     private String documentName;
 
+    @OneToOne
+    @JoinColumn(name = "file_id")
+    private DocumentStorage documentStorage;
+
     @Column(name = "timestamp")
     private String timestamp;
-
-    @Column(name = "file",
-        columnDefinition = "mediumblob")
-    private File file;
 
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "student_id")
@@ -39,11 +39,11 @@ public class Document {
 
     public Document() { }
 
-    public Document(DocumentType documentType, String documentName, String timestamp, File file, Student author) {
+    public Document(DocumentType documentType, String documentName, DocumentStorage documentStorage, String timestamp, Student author) {
         this.documentType = documentType;
         this.documentName = documentName;
+        this.documentStorage = documentStorage;
         this.timestamp = timestamp;
-        this.file = file;
         this.author = author;
     }
 
@@ -81,14 +81,6 @@ public class Document {
         this.timestamp = timestamp;
     }
 
-    public File getFile() {
-        return file;
-    }
-
-    public void setFile(File file) {
-        this.file = file;
-    }
-
     public Student getAuthor() {
         return author;
     }
@@ -97,7 +89,16 @@ public class Document {
         this.author = author;
     }
 
+    public DocumentStorage getDocumentStorage() {
+        return documentStorage;
+    }
+
+    public void setDocumentStorage(DocumentStorage documentStorage) {
+        this.documentStorage = documentStorage;
+    }
+
     //to string
+
 
     @Override
     public String toString() {
@@ -105,8 +106,8 @@ public class Document {
                 "id=" + id +
                 ", documentType=" + documentType +
                 ", documentName='" + documentName + '\'' +
+                ", documentStorage=" + documentStorage +
                 ", timestamp='" + timestamp + '\'' +
-                ", file=" + file +
                 ", author=" + author +
                 '}';
     }

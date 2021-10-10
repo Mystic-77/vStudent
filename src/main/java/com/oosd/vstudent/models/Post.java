@@ -8,7 +8,7 @@ import java.util.List;
 public class Post {
 
     public enum PostType {
-        BLOG, POST;
+        BLOG, FORUM;
     }
 
     @Id

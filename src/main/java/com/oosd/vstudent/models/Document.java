@@ -1,5 +1,7 @@
 package com.oosd.vstudent.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.File;
 
@@ -24,6 +26,7 @@ public class Document {
     @Column(name = "document_name")
     private String documentName;
 
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "file_id")
     private DocumentStorage documentStorage;

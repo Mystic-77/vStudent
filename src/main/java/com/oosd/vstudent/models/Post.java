@@ -1,5 +1,7 @@
 package com.oosd.vstudent.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -42,6 +44,7 @@ public class Post {
     @Column(name = "timestamp")
     private String timestamp;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "post")
     private List<Comment> comments;
 

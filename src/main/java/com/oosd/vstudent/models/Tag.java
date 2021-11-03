@@ -1,5 +1,7 @@
 package com.oosd.vstudent.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -12,10 +14,12 @@ public class Tag {
     @Column(name = "tag_id")
     private int id;
 
-    @Column(name = "tag_name")
+    @Column(name = "tag_name", unique = true)
     private String tagName;
 
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JsonIgnore
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},
+        fetch = FetchType.LAZY)
     @JoinTable(
             name = "student_tags",
             joinColumns = @JoinColumn(name = "tag_id"),
@@ -23,7 +27,9 @@ public class Tag {
     )
     private List<Student> students;
 
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JsonIgnore
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},
+        fetch = FetchType.LAZY)
     @JoinTable(
             name = "post_tags",
             joinColumns = @JoinColumn(name = "tag_id"),

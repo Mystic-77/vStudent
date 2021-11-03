@@ -4,6 +4,8 @@ import com.oosd.vstudent.errors.InvalidEndpointException;
 import com.oosd.vstudent.errors.SuccessResponse;
 import com.oosd.vstudent.models.CarPool;
 import com.oosd.vstudent.services.DatabaseService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Api(value = "carpool endpoints")
 @RestController
 @RequestMapping("/carpool")
 public class CarPoolController {
@@ -20,12 +23,14 @@ public class CarPoolController {
 
     //get all carpools
 
+    @ApiOperation("return list of all carpools")
     @GetMapping("/")
     public List<CarPool> retrieveAllCarPools()
     {
         return databaseService.getCarPoolRepository().findAll();
     }
 
+    @ApiOperation("add a new carpool")
     @PostMapping("/")
     public CarPool addCarPool(@RequestBody CarPool carPool)
     {
@@ -33,6 +38,7 @@ public class CarPoolController {
         return carPool;
     }
 
+    @ApiOperation("edit an existing carpool")
     @PutMapping("/{id}")
     public CarPool editCarPool(@PathVariable int id, @RequestBody CarPool carPool)
     {
@@ -45,6 +51,7 @@ public class CarPoolController {
         return carPool;
     }
 
+    @ApiOperation("Delete a carpool given its id")
     @DeleteMapping("/{id}")
     public ResponseEntity<SuccessResponse> deleteCarPool(@PathVariable int id)
     {

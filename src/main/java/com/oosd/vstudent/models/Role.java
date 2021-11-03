@@ -1,5 +1,7 @@
 package com.oosd.vstudent.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -14,9 +16,10 @@ public class Role {
     @Column(name = "role_id")
     private int id;
 
-    @Column(name = "role_name")
+    @Column(name = "role_name", unique = true)
     private String role;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "role",
         cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<Student> students;

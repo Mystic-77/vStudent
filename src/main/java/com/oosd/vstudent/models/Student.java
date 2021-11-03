@@ -1,6 +1,8 @@
 package com.oosd.vstudent.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -26,7 +28,8 @@ public class Student
     @JoinColumn(name = "role_id")
     private Role role;
 
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},
+        fetch = FetchType.LAZY)
     @JoinTable(
             name = "student_tags",
             joinColumns = @JoinColumn(name = "student_id"),
@@ -34,9 +37,11 @@ public class Student
     )
     private List<Tag> tags;
 
+    @JsonIgnore //cant have big docs coming with users
     @OneToMany(mappedBy = "author")
     private List<Post> posts;
 
+    @JsonIgnore
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(
             name = "post_likes",
@@ -45,6 +50,8 @@ public class Student
     )
     private List<Post> likedPosts;
 
+
+    @JsonIgnore
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(
             name = "comment_likes",
@@ -53,9 +60,11 @@ public class Student
     )
     private List<Comment> likedComments;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "author")
     private List<Document> documents;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "host")
     private List<CarPool> carPools;
 

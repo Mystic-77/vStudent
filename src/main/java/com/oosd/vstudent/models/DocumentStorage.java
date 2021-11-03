@@ -1,8 +1,11 @@
 package com.oosd.vstudent.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.io.File;
 
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 @Table(name = "document_storage")
 @Entity
 public class DocumentStorage {
@@ -13,17 +16,17 @@ public class DocumentStorage {
     int id;
 
 
-    @Column(name = "file",
-            columnDefinition = "mediumblob")
-    private File file;
+    @Column(name = "file")
+    @Lob
+    private byte[] file;
 
 //    @OneToOne(mappedBy = "documentStorage")
 //    private Document document;
 //    uni directional mapping so excluding the above two lines
 
-    DocumentStorage(){}
+    public DocumentStorage(){}
 
-    public DocumentStorage(File file) {
+    public DocumentStorage(byte[] file) {
         this.file = file;
     }
 
@@ -35,11 +38,11 @@ public class DocumentStorage {
         this.id = id;
     }
 
-    public File getFile() {
+    public byte[] getFile() {
         return file;
     }
 
-    public void setFile(File file) {
+    public void setFile(byte[] file) {
         this.file = file;
     }
 

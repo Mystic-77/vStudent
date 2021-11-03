@@ -6,6 +6,8 @@ import com.oosd.vstudent.errors.SuccessResponse;
 import com.oosd.vstudent.models.Role;
 import com.oosd.vstudent.models.Student;
 import com.oosd.vstudent.services.DatabaseService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Api(value = "role endpoints")
 @RestController
 @RequestMapping("/role")
 public class RoleController {
@@ -20,6 +23,7 @@ public class RoleController {
     @Autowired
     private DatabaseService databaseService;
 
+    @ApiOperation("get role information given an id")
     @GetMapping("/{id}")
     public Role retrieveRole(@PathVariable int id)
     {
@@ -31,6 +35,7 @@ public class RoleController {
 
     }
 
+    @ApiOperation("get a list of all roles")
     @GetMapping("/")
     public List<Role> retrieveRoles()
     {
@@ -44,6 +49,7 @@ public class RoleController {
         return role;
     }
 
+    @ApiOperation("Returns a list of  students given a role id")
     @GetMapping("/{id}/students")
     public List<Student> retrieveStudentsByRole(@PathVariable int id)
     {
@@ -54,6 +60,7 @@ public class RoleController {
         return databaseService.getRoleRepository().getById(id).getStudents();
     }
 
+    @ApiOperation("edit a role given its id")
     @PutMapping("/{id}")
     public Role updateRole(@PathVariable("id") int id, @RequestBody Role role)
     {
@@ -66,6 +73,7 @@ public class RoleController {
         return role;
     }
 
+    @ApiOperation("Delete a role given its id")
     @DeleteMapping("/{id}")
     public ResponseEntity<SuccessResponse> deleteRole(@PathVariable("id") int id)
     {

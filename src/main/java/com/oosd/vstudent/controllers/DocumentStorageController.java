@@ -4,11 +4,17 @@ import com.oosd.vstudent.errors.InvalidEndpointException;
 import com.oosd.vstudent.errors.SuccessResponse;
 import com.oosd.vstudent.models.DocumentStorage;
 import com.oosd.vstudent.services.DatabaseService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
+@Api(value = "Storage endpoints")
 @RestController
 @RequestMapping("/file")
 public class DocumentStorageController {
@@ -16,7 +22,7 @@ public class DocumentStorageController {
     @Autowired
     private DatabaseService databaseService;
 
-    //allow retrieval of only one file
+    @ApiOperation("return a document info given its id")
     @GetMapping("/{id}")
     public DocumentStorage retrieveFile(@PathVariable int id)
     {
@@ -27,13 +33,16 @@ public class DocumentStorageController {
         return databaseService.getDocumentStorageRepository().getById(id);
     }
 
+    @ApiOperation("add a new document info")
     @PostMapping("/")
-    public int addFile(@RequestBody DocumentStorage documentStorage)
-    {
+    public int addFile(@RequestParam MultipartFile file) throws IOException {
+        DocumentStorage documentStorage = new DocumentStorage();
+        documentStorage.setFile(file.getBytes());
         databaseService.getDocumentStorageRepository().save(documentStorage);
         return documentStorage.getId();
     }
 
+    @ApiOperation("Edit an existing document given its id")
     @PutMapping("/{id}")
     public ResponseEntity<SuccessResponse> updateFile(@PathVariable int id, @RequestBody DocumentStorage documentStorage)
     {
@@ -51,6 +60,7 @@ public class DocumentStorageController {
         return new ResponseEntity<SuccessResponse>(sr, HttpStatus.OK);
     }
 
+    @ApiOperation("delete a document given its id")
     @DeleteMapping("/{id}")
     public ResponseEntity<SuccessResponse> deleteFile(@PathVariable int id)
     {

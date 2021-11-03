@@ -6,6 +6,8 @@ import com.oosd.vstudent.models.Post;
 import com.oosd.vstudent.models.Student;
 import com.oosd.vstudent.models.Tag;
 import com.oosd.vstudent.services.DatabaseService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Api(value = "tag endpoints")
 @RestController
 @RequestMapping("/tag")
 public class TagController {
@@ -20,14 +23,14 @@ public class TagController {
     @Autowired
     DatabaseService databaseService;
 
-    //get all tags
+    @ApiOperation("Returns list of all tags")
     @GetMapping("/")
     public List<Tag> retrieveTags()
     {
         return databaseService.getTagRepository().findAll();
     }
 
-    //get a particular tag
+    @ApiOperation("Return a tag given its id")
     @GetMapping("/{id}")
     public Tag retrieveTag(@PathVariable int id)
     {
@@ -38,7 +41,7 @@ public class TagController {
         return databaseService.getTagRepository().getById(id);
     }
 
-    //get all students of this tag
+    @ApiOperation("Return list of students that have this tag")
     @GetMapping("/{id}/students")
     public List<Student> retrieveStudentsByTag(@PathVariable int id)
     {
@@ -49,7 +52,7 @@ public class TagController {
         return databaseService.getTagRepository().getById(id).getStudents();
     }
 
-    //get all posts of this tag
+    @ApiOperation("Return list of Posts that have this tag")
     @GetMapping("/{id}/posts")
     public List<Post> retrievePostsByTag(@PathVariable int id)
     {
@@ -60,14 +63,14 @@ public class TagController {
         return databaseService.getTagRepository().getById(id).getPosts();
     }
 
-    //get tag by tag name
+    @ApiOperation("Return a tag given its tag name. This endpoint is made to easily get an id of an existing tag")
     @GetMapping("/{tagName}")
     public Tag retrieveTagByName(@PathVariable String tagName)
     {
         return databaseService.getTagRepository().getTagByTagName(tagName);
     }
 
-    //add a tag
+    @ApiOperation("Add a tag")
     @PostMapping("/")
     public Tag addTag(@RequestBody Tag tag)
     {
@@ -75,7 +78,7 @@ public class TagController {
         return tag;
     }
 
-    //edit role
+    @ApiOperation("Edit a tag")
     @PutMapping("/{id}")
     public Tag editTag(@PathVariable int id, @RequestBody Tag tag)
     {
@@ -88,6 +91,7 @@ public class TagController {
         return tag;
     }
 
+    @ApiOperation("Delete a tag")
     @DeleteMapping("/{id}")
     public ResponseEntity<SuccessResponse> deleteTag(@PathVariable int id)
     {

@@ -3,6 +3,7 @@ package com.oosd.vstudent.controllers;
 import com.oosd.vstudent.errors.InvalidEndpointException;
 import com.oosd.vstudent.errors.SuccessResponse;
 import com.oosd.vstudent.models.Document;
+import com.oosd.vstudent.models.DocumentStorage;
 import com.oosd.vstudent.services.DatabaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,6 +43,12 @@ public class DocumentController {
     public List<Document> retrieveAllDocuments()
     {
         return databaseService.getDocumentRepository().findAll();
+    }
+
+    @GetMapping("/{id}/storage")
+    public DocumentStorage retrieveStorageByDocument(@PathVariable int id)
+    {
+        return databaseService.getDocumentRepository().getById(id).getDocumentStorage();
     }
 
     //add a doc

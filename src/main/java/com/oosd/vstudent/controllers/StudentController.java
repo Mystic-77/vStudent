@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/student")
 public class StudentController {
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private DatabaseService databaseService;
@@ -78,6 +82,7 @@ public class StudentController {
     @PostMapping("/")
     public Student addStudent(@RequestBody Student student)
     {
+        student.setPassword(passwordEncoder.encode(student.getPassword()));
         return databaseService.getStudentRepository().save(student);
     }
 

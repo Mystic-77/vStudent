@@ -16,6 +16,7 @@ import java.util.List;
 @Api(value = "carpool endpoints")
 @RestController
 @RequestMapping("/carpool")
+@CrossOrigin
 public class CarPoolController {
 
     @Autowired

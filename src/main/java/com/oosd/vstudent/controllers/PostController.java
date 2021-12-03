@@ -15,6 +15,7 @@ import java.util.List;
 
 @Api(value = "Post endpoints")
 @RestController
+@CrossOrigin
 @RequestMapping("/post")
 public class PostController {
     @Autowired

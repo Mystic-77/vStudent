@@ -18,6 +18,7 @@ import java.util.List;
 @Api(value = "Comment endpoints")
 @RestController
 @RequestMapping("/comment")
+@CrossOrigin
 public class CommentController {
 
     @Autowired

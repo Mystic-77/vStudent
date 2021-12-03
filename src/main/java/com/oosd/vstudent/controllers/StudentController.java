@@ -3,19 +3,26 @@ package com.oosd.vstudent.controllers;
 import com.oosd.vstudent.errors.InvalidEndpointException;
 import com.oosd.vstudent.errors.SuccessResponse;
 import com.oosd.vstudent.models.*;
+import com.oosd.vstudent.security.CustomUserDetails;
 import com.oosd.vstudent.services.DatabaseService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Api(value = "Student endpoints")
 @RestController
+@CrossOrigin
 @RequestMapping("/student")
 public class StudentController {
 
@@ -30,6 +37,14 @@ public class StudentController {
     public List<Student> retreiveAllStudents()
     {
         return databaseService.getStudentRepository().findAll();
+    }
+
+    @ApiOperation(value = "Return id of user given his username")
+    @GetMapping("/id/{username}")
+    public int retrieveStudentFromUsername(@PathVariable("username") String username) {
+        Optional<Student> student = databaseService.getStudentRepository().findByUsername(username);
+        student.orElseThrow(() -> new UsernameNotFoundException("Not found user : " + username));
+        return student.get().getId();
     }
 
     @ApiOperation(value = "Return a particular student with the given id")
@@ -80,9 +95,26 @@ public class StudentController {
 
     @ApiOperation("Adds a new student to the database")
     @PostMapping("/")
-    public Student addStudent(@RequestBody Student student)
-    {
+    public Student addStudent(@RequestParam("username") String username,
+                              @RequestParam("password") String password,
+                              @RequestParam("email") String email,
+                              @RequestParam("role") String role,
+                              @RequestParam("pfp") MultipartFile file) throws IOException {
+        System.out.println("works so far");
+        Role r = databaseService.getRoleRepository().findRoleByRole(role);
+        Student student = new Student(username, password, email, null, null);
+        if (r != null)
+        {
+            student.setRole(r);
+        }
+        else
+        {
+            r = new Role(role);
+            student.setRole(r);
+        }
+        student.setPfp(file.getBytes());
         student.setPassword(passwordEncoder.encode(student.getPassword()));
+
         return databaseService.getStudentRepository().save(student);
     }
 

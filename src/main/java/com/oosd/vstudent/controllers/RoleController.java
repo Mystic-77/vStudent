@@ -17,6 +17,7 @@ import java.util.List;
 
 @Api(value = "role endpoints")
 @RestController
+@CrossOrigin
 @RequestMapping("/role")
 public class RoleController {
 

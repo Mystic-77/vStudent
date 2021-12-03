@@ -17,6 +17,7 @@ import java.io.IOException;
 @Api(value = "Storage endpoints")
 @RestController
 @RequestMapping("/file")
+@CrossOrigin
 public class DocumentStorageController {
 
     @Autowired

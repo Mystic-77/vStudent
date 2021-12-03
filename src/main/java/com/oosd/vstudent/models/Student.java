@@ -2,10 +2,12 @@ package com.oosd.vstudent.models;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.util.List;
 
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 @Entity
 @Table(name = "student")
 public class Student
@@ -68,21 +70,24 @@ public class Student
     @OneToMany(mappedBy = "host")
     private List<CarPool> carPools;
 
-    @OneToOne
-    @JoinColumn(name = "file_id")
-    private DocumentStorage profilePicture;
+//    @OneToOne
+//    @JoinColumn(name = "file_id")
+//    private DocumentStorage profilePicture;
+
+    @Column(name = "pfp")
+    @Lob
+    private byte[] pfp;
 
     //constructors
 
     public Student() { }
 
-    public Student(String username, String password, String email, Role role, List<Tag> tags, DocumentStorage profilePicture) {
+    public Student(String username, String password, String email, Role role, List<Tag> tags) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.role = role;
         this.tags = tags;
-        this.profilePicture = profilePicture;
     }
 
     //getters and setters
@@ -175,32 +180,11 @@ public class Student
         this.likedComments = likedComments;
     }
 
-    public DocumentStorage getProfilePicture() {
-        return profilePicture;
+    public byte[] getPfp() {
+        return pfp;
     }
 
-    public void setProfilePicture(DocumentStorage profilePicture) {
-        this.profilePicture = profilePicture;
-    }
-
-    //to string
-
-
-    @Override
-    public String toString() {
-        return "Student{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", role=" + role +
-                ", tags=" + tags +
-                ", posts=" + posts +
-                ", likedPosts=" + likedPosts +
-                ", likedComments=" + likedComments +
-                ", documents=" + documents +
-                ", carPools=" + carPools +
-                ", profilePicture=" + profilePicture +
-                '}';
+    public void setPfp(byte[] pfp) {
+        this.pfp = pfp;
     }
 }

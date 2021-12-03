@@ -15,7 +15,7 @@ public class EndpointExceptionHandler {
 
         errorResponse.setStatus(HttpStatus.NOT_FOUND.value());
         errorResponse.setMessage(exception.getMessage());
-
+        System.out.println(errorResponse);
         return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
@@ -26,7 +26,7 @@ public class EndpointExceptionHandler {
 
         errorResponse.setStatus(HttpStatus.I_AM_A_TEAPOT.value());
         errorResponse.setMessage(exception.getMessage());
-
+        System.out.println(errorResponse);
         return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.I_AM_A_TEAPOT);
     }
 

@@ -17,6 +17,7 @@ import java.util.List;
 
 @Api(value = "tag endpoints")
 @RestController
+@CrossOrigin
 @RequestMapping("/tag")
 public class TagController {
 

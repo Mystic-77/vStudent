@@ -4,6 +4,8 @@ import com.oosd.vstudent.errors.InvalidEndpointException;
 import com.oosd.vstudent.errors.SuccessResponse;
 import com.oosd.vstudent.models.Document;
 import com.oosd.vstudent.models.DocumentStorage;
+import com.oosd.vstudent.models.Student;
+import com.oosd.vstudent.models.Tag;
 import com.oosd.vstudent.services.DatabaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -47,17 +49,24 @@ public class DocumentController {
     }
 
     @GetMapping("/{id}/storage")
-    public DocumentStorage retrieveStorageByDocument(@PathVariable int id)
+    public byte[] retrieveStorageByDocument(@PathVariable int id)
     {
-        return databaseService.getDocumentRepository().getById(id).getDocumentStorage();
+        return databaseService.getDocumentRepository().getById(id).getDocumentStorage().getFile();
     }
 
     //add a doc
     @PostMapping("/")
-    public Document addDocument(@RequestBody Document document)
+    public Document addDocument(@RequestParam("author") String author,
+                                @RequestParam("documentName") String name,
+                                @RequestParam("documentType") String type,
+                                @RequestParam("documentId") String docId,
+                                @RequestParam("timestamp") String timestamp)
     {
-        databaseService.getDocumentRepository().save(document);
-        return document;
+        Student student = databaseService.getStudentRepository().findByUsername(author).get();
+        Document.DocumentType documentType = Document.DocumentType.valueOf(type);
+        DocumentStorage documentStorage = databaseService.getDocumentStorageRepository().getById(Integer.valueOf(docId));
+        Document document = new Document(documentType, name, documentStorage, timestamp, student);
+        return databaseService.getDocumentRepository().save(document);
     }
 
     //edit a doc

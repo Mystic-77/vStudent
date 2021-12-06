@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,12 +40,13 @@ public class StudentController {
         return databaseService.getStudentRepository().findAll();
     }
 
-    @ApiOperation(value = "Return id of user given his username")
-    @GetMapping("/id/{username}")
-    public int retrieveStudentFromUsername(@PathVariable("username") String username) {
+    @ApiOperation(value = "Return user given his username")
+    @GetMapping("/user/{username}")
+    @CrossOrigin
+    public Student retrieveStudentFromUsername(@PathVariable("username") String username) {
         Optional<Student> student = databaseService.getStudentRepository().findByUsername(username);
         student.orElseThrow(() -> new UsernameNotFoundException("Not found user : " + username));
-        return student.get().getId();
+        return student.get();
     }
 
     @ApiOperation(value = "Return a particular student with the given id")
@@ -99,10 +101,12 @@ public class StudentController {
                               @RequestParam("password") String password,
                               @RequestParam("email") String email,
                               @RequestParam("role") String role,
+                              @RequestParam("tags") String tags,
                               @RequestParam("pfp") MultipartFile file) throws IOException {
         System.out.println("works so far");
+
         Role r = databaseService.getRoleRepository().findRoleByRole(role);
-        Student student = new Student(username, password, email, null, null);
+        Student student = new Student(username, password, email, null, new ArrayList<Tag>());
         if (r != null)
         {
             student.setRole(r);
@@ -114,6 +118,15 @@ public class StudentController {
         }
         student.setPfp(file.getBytes());
         student.setPassword(passwordEncoder.encode(student.getPassword()));
+
+        for (String s : tags.split(" "))
+        {
+            Tag t = new Tag(s);
+            if (!student.getTags().contains(t))
+            {
+                student.getTags().add(t);
+            }
+        }
 
         return databaseService.getStudentRepository().save(student);
     }

@@ -3,6 +3,7 @@ package com.oosd.vstudent.controllers;
 import com.oosd.vstudent.errors.InvalidEndpointException;
 import com.oosd.vstudent.errors.SuccessResponse;
 import com.oosd.vstudent.models.CarPool;
+import com.oosd.vstudent.models.Student;
 import com.oosd.vstudent.services.DatabaseService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,8 +34,14 @@ public class CarPoolController {
 
     @ApiOperation("add a new carpool")
     @PostMapping("/")
-    public CarPool addCarPool(@RequestBody CarPool carPool)
+    public CarPool addCarPool(@RequestParam("source") String source,
+                              @RequestParam("destination") String destination,
+                              @RequestParam("date") String date,
+                              @RequestParam("timestamp") String timestamp,
+                              @RequestParam("host") String host)
     {
+        Student s = databaseService.getStudentRepository().findByUsername(host).get();
+        CarPool carPool = new CarPool(s, timestamp, source, destination, date);
         databaseService.getCarPoolRepository().save(carPool);
         return carPool;
     }

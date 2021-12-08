@@ -3,6 +3,7 @@ package com.oosd.vstudent.controllers;
 import com.oosd.vstudent.errors.InvalidEndpointException;
 import com.oosd.vstudent.errors.SuccessResponse;
 import com.oosd.vstudent.models.Comment;
+import com.oosd.vstudent.models.Post;
 import com.oosd.vstudent.models.Student;
 import com.oosd.vstudent.services.DatabaseService;
 import io.swagger.annotations.Api;
@@ -26,9 +27,10 @@ public class CommentController {
 
     @ApiOperation("Return list of comments of the post")
     @GetMapping("/{postId}")
-    public List<Comment> retrieveCommentsByPost(@PathVariable int postId)
+    public List<Comment> retrieveCommentsByPost(@PathVariable("postId") int postId)
     {
-        return databaseService.getCommentRepository().getCommentsByPostOrderByTimestamp(postId);
+        Post post = databaseService.getPostRepository().getById(postId);
+        return post.getComments();
     }
 
     @ApiOperation("Return list of students who liked a post")
@@ -42,9 +44,16 @@ public class CommentController {
     }
 
     @ApiOperation("add a new comment")
-    @PostMapping("/")
-    public Comment addComment(@RequestBody Comment comment)
+    @PostMapping("/{postId}")
+    public Comment addComment(@RequestParam("author") String author,
+                              @RequestParam("timestamp") String timestamp,
+                              @RequestParam("content") String content,
+                              @PathVariable("postId") int postId)
     {
+        Student student = databaseService.getStudentRepository().findByUsername(author).get();
+        Post post = databaseService.getPostRepository().getById(postId);
+        Comment comment = new Comment(content, post, student, timestamp);
+        comment.setLikedBy(new ArrayList<>());
         databaseService.getCommentRepository().save(comment);
         return comment;
     }
@@ -52,7 +61,7 @@ public class CommentController {
 
     @ApiOperation("edit a comment given its id")
     @PutMapping("/{id}")
-    public Comment editComment(@PathVariable int id, @RequestBody Comment comment)
+    public Comment editComment(@PathVariable("id") int id, @RequestBody Comment comment)
     {
         if (!databaseService.getCommentRepository().existsById(id))
         {

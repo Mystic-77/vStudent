@@ -121,7 +121,15 @@ public class StudentController {
 
         for (String s : tags.split(" "))
         {
-            Tag t = new Tag(s);
+            Tag t = null;
+            if (!databaseService.getTagRepository().existsTagByTagName(s))
+            {
+                t = new Tag(s);
+            }
+            else
+            {
+                t = databaseService.getTagRepository().getTagByTagName(s);
+            }
             if (!student.getTags().contains(t))
             {
                 student.getTags().add(t);

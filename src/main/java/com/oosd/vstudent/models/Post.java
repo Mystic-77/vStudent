@@ -3,6 +3,7 @@ package com.oosd.vstudent.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -26,7 +27,7 @@ public class Post {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "content")
+    @Column(name = "content", length = 30000)
     private String content;
 
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
@@ -66,6 +67,9 @@ public class Post {
         this.author = author;
         this.tags = tags;
         this.timestamp = timestamp;
+
+        this.comments = new ArrayList<>();
+        this.likedBy = new ArrayList<>();
     }
 
     //getters and setters

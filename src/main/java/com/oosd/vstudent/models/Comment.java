@@ -15,7 +15,7 @@ public class Comment {
     @Column(name = "comment_id")
     private int id;
 
-    @Column(name = "content")
+    @Column(name = "content", length = 30000)
     private String content;
 
     @JsonIgnore

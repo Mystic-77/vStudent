@@ -3,6 +3,8 @@ package com.oosd.vstudent.controllers;
 import com.oosd.vstudent.errors.InvalidEndpointException;
 import com.oosd.vstudent.errors.SuccessResponse;
 import com.oosd.vstudent.models.Post;
+import com.oosd.vstudent.models.Student;
+import com.oosd.vstudent.models.Tag;
 import com.oosd.vstudent.services.DatabaseService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -11,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Api(value = "Post endpoints")
@@ -48,9 +51,34 @@ public class PostController {
 
     @ApiOperation("Add a new post")
     @PostMapping("/")
-    public ResponseEntity<SuccessResponse> addPost(@RequestBody Post post)
+    public ResponseEntity<SuccessResponse> addPost(@RequestParam("author") String author,
+                                                   @RequestParam("timestamp") String timestamp,
+                                                   @RequestParam("tags") String tags,
+                                                   @RequestParam("content") String content,
+                                                   @RequestParam("title") String title,
+                                                   @RequestParam("type") String type)
     {
+        Student student = databaseService.getStudentRepository().findByUsername(author).get();
+        ArrayList<Tag> tagList = new ArrayList<>();
+        for (String s : tags.split(" "))
+        {
+            Tag t = null;
+            if (!databaseService.getTagRepository().existsTagByTagName(s))
+            {
+                t = new Tag(s);
+            }
+            else
+            {
+                t = databaseService.getTagRepository().getTagByTagName(s);
+            }
+            if (!tagList.contains(t))
+            {
+                tagList.add(t);
+            }
+        }
+        Post post = new Post(Post.PostType.valueOf(type), title, content, student, tagList, timestamp);
         databaseService.getPostRepository().save(post);
+
         SuccessResponse sr = new SuccessResponse();
         sr.setMessage("post added");
         sr.setStatus(HttpStatus.OK.value());
